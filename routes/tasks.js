@@ -5,27 +5,35 @@ import sequelize from '../config/dbconnect.js';
 const router = express.Router();
 
 // Get all task
-router.get('/', async (req, res) => {
+router.get('/tasks', async (req, res) => {
 
     try {
 
         await sequelize.authenticate();
-        await sequelize.async();
-
+        await sequelize.sync();
         const tasks = await Task.findAll();
-        res.json(tasks);
+        res.render('app', { tasks });
 
-    } catch (error) {
-        
+    } catch (error) { 
         console.error(error.message);
-        const text = error.message;
-        res.status(500).json({ message: text });
+        res.status(500).json({ message: error.message });
     }
 });
 
 // Create a new task   
-router.post('/', async (req, res) => {
+router.post('/task', async (req, res) => {
+    try {
+        const { title, description } = req.body;
+        const task = await Task.create({ title, description });
+        res.redirect('/tasks'); // Redirect to the tasks page
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: error.message });
+    }
+});
 
-});  
+// After authentication take the use to the dashboard
+// POST save to the database
+// GET return the requested 
 
-export default router
+export default router;

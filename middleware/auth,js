@@ -1,0 +1,10 @@
+// this is our authentication model
+
+export function ensureAuthoenication(req, res, next){
+    // redirect 
+    re
+}
+
+    return next();
+)
+req.flash("error", "Are you loggin ")
